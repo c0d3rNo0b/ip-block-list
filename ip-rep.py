@@ -17,31 +17,27 @@ regex = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
 
 # load our exceptions
 exceptions_list = []
-fdexceptions = open('exceptions.txt','r')
-for line in fdexceptions:
-	# print "Found this exception; %s" % line.rstrip()
-	exceptions_list.append(line.rstrip())
-fdexceptions.close()
+with open('exceptions.txt','r') as fdexceptions:
+	for line in fdexceptions:
+		# print "Found this exception; %s" % line.rstrip()
+		exceptions_list.append(line.rstrip())
 	
 # look for IP matches log directory
 matches = {}
 logDir = 'logs'
 for filename in os.listdir(logDir):
-        fd = open(logDir + "/" + filename, "r")
-        for line in fd:
-                ips = regex.findall(line)
-                for ip in ips:
-			if valid_ip(ip):
-				matches[ip] = 1
-			else:
-				print "Found invalid IP address " + ip
-	fd.close()
+        with open(logDir + "/" + filename, "r") as fd:
+		for line in fd:
+	                ips = regex.findall(line)
+        	        for ip in ips:
+				if valid_ip(ip):
+					matches[ip] = 1
+				else:
+					print "Found invalid IP address " + ip
 
 # dump unique matches into a file
-banlist = open('iplists.txt', 'w')
-for ip in matches:
-	# cheapest time to do exceptions check is after dedup
-	if not all_matching_cidrs(ip, exceptions_list):
-		banlist.write(ip + '\n')
-
-banlist.close()
+with open('iplists.txt', 'w') as banlist:
+	for ip in matches:
+		# cheapest time to do exceptions check is after dedup
+		if not all_matching_cidrs(ip, exceptions_list):
+			banlist.write(ip + '\n')
