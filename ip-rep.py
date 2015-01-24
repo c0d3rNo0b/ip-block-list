@@ -2,6 +2,7 @@
 import os
 import re
 from netaddr import all_matching_cidrs
+from netaddr import cidr_merge
 
 # Data we have has non-valid ip addresses
 def valid_ip(address):
@@ -19,9 +20,11 @@ regex = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
 exceptions_list = []
 with open('exceptions.txt','r') as fdexceptions:
 	for line in fdexceptions:
-		# print "Found this exception; %s" % line.rstrip()
 		exceptions_list.append(line.rstrip())
-	
+
+# remove duplication in exceptions list
+exceptions_list = cidr_merge(exceptions_list)
+
 # look for IP matches log directory
 matches = {}
 logDir = 'logs'
