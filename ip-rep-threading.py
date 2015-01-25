@@ -2,6 +2,8 @@
 import os
 import re
 import concurrent.futures
+import multiprocessing
+import socket
 from netaddr import all_matching_cidrs
 from netaddr import cidr_merge
 from itertools import izip_longest
@@ -9,9 +11,8 @@ from itertools import izip_longest
 # Data we have has non-valid ip addresses
 def valid_ip(address):
     try:
-        host_bytes = address.split('.')
-	valid = [int(b) for b in host_bytes if 0 <= int(b) <= 255] 
-        return len(host_bytes) == 4 and len(valid) == 4
+	socket.inet_aton(address)
+	return True
     except:
         return False
 
@@ -41,7 +42,7 @@ exceptions_list = cidr_merge(exceptions_list)
 
 # look for IP matches log directory
 matches = {}
-logDir = 'logs'
+logDir = 'rules'
 for filename in os.listdir(logDir):
         with open(logDir + "/" + filename, "r") as fd:
 		for line in fd:
@@ -54,6 +55,7 @@ for filename in os.listdir(logDir):
 
 # dump unique matches into a file                                                                                                                             
 with open('iplists.txt', 'w') as banlist: 
-	with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-		for sublist in grouper(100, matches):
+	with concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+		groupsize = int(len(matches) / multiprocessing.cpu_count() / 2) + 1
+		for sublist in grouper(groupsize, matches):
 			executor.submit(match_worker, sublist, exceptions_list, banlist)
