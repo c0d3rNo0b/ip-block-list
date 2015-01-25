@@ -1,18 +1,18 @@
 #!/usr/bin/python
 import os
 import re
+import socket
 from netaddr import all_matching_cidrs
 from netaddr import cidr_merge
 
 # Data we have has non-valid ip addresses
 def valid_ip(address):
     try:
-        host_bytes = address.split('.')
-	valid = [int(b) for b in host_bytes if 0 <= int(b) <= 255] 
-        return len(host_bytes) == 4 and len(valid) == 4
+	socket.inet_aton(address)
+	return True
     except:
         return False
- 
+
 # define a match for IP addresses
 regex = re.compile('(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})')
 
