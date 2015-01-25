@@ -27,7 +27,7 @@ exceptions_list = cidr_merge(exceptions_list)
 
 # look for IP matches log directory
 matches = {}
-logDir = 'logs'
+logDir = 'rules'
 for filename in os.listdir(logDir):
         with open(logDir + "/" + filename, "r") as fd:
 		for line in fd:
@@ -35,8 +35,6 @@ for filename in os.listdir(logDir):
         	        for ip in ips:
 				if valid_ip(ip):
 					matches[ip] = 1
-				else:
-					print "Found invalid IP address " + ip
 
 # dump unique matches into a file
 with open('iplists.txt', 'w') as banlist:

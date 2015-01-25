@@ -20,7 +20,7 @@ def valid_ip(address):
 
 # workers do the cidr matching concurrently
 def match_worker(ip):
-	if ip != None and not all_matching_cidrs(ip, exceptions_list):
+	if not all_matching_cidrs(ip, exceptions_list):
 		return ip
 
 def main():
@@ -38,7 +38,7 @@ def main():
 
 	# look for IP matches log directory
 	matches = {}
-	logDir = 'test-data'
+	logDir = 'rules'
 	for filename in os.listdir(logDir):
 	        with open(logDir + "/" + filename, "r") as fd:
 			for line in fd:
@@ -51,7 +51,7 @@ def main():
 	with open('iplists.txt', 'w') as banlist: 
 		with concurrent.futures.ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
 			for ip in executor.map(match_worker, matches):
-				if ip != None:
+				if ip:
 					banlist.write(ip + '\n')
 
 if __name__ == '__main__':
