@@ -47,8 +47,8 @@ def main():
 					if valid_ip(ip):
 						matches[ip] = 1
 
-	# dump unique matches into a file                                                                                                                             
-	with open('iplists.txt', 'w') as banlist: 
+	# dump unique matches into a file
+	with open('iplists.txt', 'w') as banlist:
 		with concurrent.futures.ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
 			for ip in executor.map(match_worker, matches):
 				if ip:

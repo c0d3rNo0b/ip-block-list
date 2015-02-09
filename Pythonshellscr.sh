@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #This shell script will install python, all dependancies, including source files, and automation for 
 #the Reputation Lists Python script Version .5(Alpha)
 # 
@@ -19,7 +19,7 @@ echo Downloading Chinese IP blocks for exclusion lists.
 wget -O exceptionsraw.txt http://www.okean.com/chinacidr.txt
 grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\/[0-9]\{1,\}' exceptionsraw.txt >> exceptions.txt
 echo exceptionsraw.txt cleaned and moved to exceptions.txt. exceptionsraw.txt will be deleted!
-rm exceptionsraw.txt
+rm -f exceptionsraw.txt
 chmod 777 exceptions.txt
 echo Making rules directory
 mkdir rules
