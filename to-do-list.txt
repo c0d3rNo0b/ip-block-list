@@ -1,0 +1,8 @@
+create variables for country codes, 
+create drop down selection for web app. 
+create request for IP blocks in CIDR for countries.
+readd botcc IP addresses after all exceptions made to make sure known bot nets are in the list. 
+figure out how to build interface in html, 
+figure out how to integrate the html side with the scripts on backend.  
+research simple python frameworks for web apps. 
+psuedocode the outline basics of web app.
