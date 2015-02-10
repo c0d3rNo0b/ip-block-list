@@ -23,13 +23,13 @@ rm -f exceptionsraw.txt
 chmod 777 exceptions.txt
 echo Making rules directories
 mkdir ./rules
-#mkdir ./rawrules
-#chmod 777 -R rawrules
+mkdir ./rawrules
+chmod 777 -R rawrules
 chmod 777 -R rules
 echo Downloading rules files to rules directory
 wget -e robots=off -r -nH --cut-dirs=2 --reject "index.html*" --no-parent -P ./rules http://rules.emergingthreats.net/blockrules/
 chmod 777 -R rules
-#cp ./rawrules/{*ciarmy*.rules,*compromised*.rules,*drop*.rules,*tor*.rules,*botcc*.rules} ./rules/ 
+cp ./rawrules/{*ciarmy*.rules,*compromised*.rules,*drop*.rules,*tor*.rules,*botcc*.rules} ./rules/ 
 #run the reputation list python script to generate the block list. 
 echo running ip-repthreading.py now! This may take several minutes depending on machine resources. 
 python ip-rep-threading.py
